@@ -1,9 +1,13 @@
-# Getting Started with Create React App
+# Getting Started with React Mini Job Portal Challange
 
-Details for the proejct Requirments [Mini Job Portal](https://teyouale.notion.site/Mini-Job-Portal-8ac6bf1ef3274448bbe3c9b298d46083).
+Read Details for the proejct Requirments [Mini Job Portal](https://teyouale.notion.site/Mini-Job-Portal-8ac6bf1ef3274448bbe3c9b298d46083).
 
-## Available Scripts
 
-In the project directory, you can run:
+how to run the project:
+###  `$ git clone https://github.com/jonathan-demlie/React-Challange.git`
 
-### `npm start`
+###  `$ cd React-Challenge`
+
+###  `$ npm install`
+
+### `$ npm start`
