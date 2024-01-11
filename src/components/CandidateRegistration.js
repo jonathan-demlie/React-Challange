@@ -87,27 +87,36 @@ function CandidateRegistration() {
   const highlightInput = true;
   
   const handleSkillChange = (e) => {
+    setFormData({ ...formData, skill: e.target.value });
   };
   const handleAddSkill = () => {
-   
+    setFormData({ ...formData, skills: [...formData.skills, formData.skill], skill: "" });
   };
 
  
 
   const handleFormSubmit = (e) => {
- 
+    e.preventDefault();
+    const newCandidate = {
+      name: formData.name,
+      email: formData.email,
+      role: formData.role,
+      skills: formData.skills,
+    };
+    setCandidates([...candidates, newCandidate]);
+    setFormData({ name: "", email: "", role: "", skill: "", skills: [] });
+    setRegistrationStatus("Candidate registered successfully.");
   };
-
 
   useEffect(() => {
     const storedCandidates = localStorage.getItem("candidates");
     if (storedCandidates) {
-      // Hint: Implement this
+      setCandidates(JSON.parse(storedCandidates));
     }
   }, []);
 
   useEffect(() => {
-    // Save candidates to localStorage whenever candidates state changes
+    localStorage.setItem("candidates", JSON.stringify(candidates));
   }, [candidates]);
 
   return (
@@ -123,7 +132,7 @@ function CandidateRegistration() {
                 required
                 style={inputStyle}
                 data-testid="form-input-name"
-               
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
             </div>
             <div className="form-group" style={formGroupStyle}>
@@ -131,8 +140,9 @@ function CandidateRegistration() {
                 type="email"
                 name="email"
                 placeholder="Email"
-                data-testid="form-input-name"
+                data-testid="form-input-email"
                 required
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 style={{ ...inputStyle, ...(highlightInput ? highlight : {}) }}
               />
             </div>
@@ -140,9 +150,11 @@ function CandidateRegistration() {
               <input
                 type="text"
                 name="role"
-              
+                data-testid="form-input-role"
                 placeholder="Role"
                 required
+                value={formData.role}
+                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                 style={inputStyle}
               />
             </div>
@@ -152,20 +164,23 @@ function CandidateRegistration() {
                 type="text"
                 name="skill"
                 placeholder="Skill"
+                value={formData.skill}
+                onChange={handleSkillChange}
                 style={inputStyle}
               />
               <button
                 type="button"
                 data-testid="add-btn"
                 style={addSkillButtonStyle}
+                onClick={handleAddSkill}
               >
                 Add Skill
               </button>
             </div>
             <div>
               {formData.skills.map((skill, index) => (
-                <span data-testid="skill-tag" style={skillTagStyle}>
-                  {/* Implement this */}
+                <span data-testid={`skill-tag-${index}`} style={skillTagStyle} key={index}>
+                  {skill}
                 </span>
               ))}
             </div>
@@ -185,6 +200,7 @@ function CandidateRegistration() {
               </button>
             </div>
           </form>
+          {registrationStatus && <div data-testid="alert-message" style={alertMessage}>{registrationStatus}</div>}
         </div>
       </div>
     </div>

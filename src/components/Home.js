@@ -28,16 +28,24 @@ const buttonStyle = {
 };
 
 function Home() {
+  const location = useLocation();
+
+ const handleClick = (event) => {
+   if (event.target.textContent === "Register Candidate") {
+     location.pathname = "/candidate/registration";
+   } else {
+     location.pathname = "/candidate/list";
+   }
+ };
   return (
     <div data-testid="home-component" style={homeStyle}>
       <div style={buttonContainerStyle}>
-        {/* Hint: Implement this */}
-        <button data-testid="register-button" style={buttonStyle}>
+        <Link to="/candidate/registration" data-testid="register-button" style={buttonStyle} onClick={handleClick}>
           Register Candidate
-        </button>
-        <button data-testid="list-button" style={buttonStyle}>
+        </Link>
+        <Link to="/candidate/list" data-testid="list-button" style={buttonStyle} onClick={handleClick}>
           List Candidates
-        </button>
+        </Link>
       </div>
     </div>
   );

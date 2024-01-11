@@ -71,16 +71,23 @@ function CandidateList() {
   useEffect(() => {
     const storedCandidates = localStorage.getItem("candidates");
     if (storedCandidates) {
-      // Hint: Implement this
+      setCandidates(JSON.parse(storedCandidates));
     }
   }, []);
 
   const handleSearch = () => {
-    // Hint: Implement this
-  };
+    if (searchText === "") {
+      setFilteredCandidates(candidates);
+    } else {
+      const filtered = candidates.filter((candidate) =>
+        candidate.skills.some((skill) => skill.toLowerCase().includes(searchText.toLowerCase()))
+      );
+      setFilteredCandidates(filtered);
+    }
+ };
 
   const handleListAll = () => {
-    // Hint: Implement this
+    setFilteredCandidates(candidates);
   };
 
   return (
@@ -89,28 +96,27 @@ function CandidateList() {
         <input
           type="text"
           placeholder="search skills"
-          value=""
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
           style={searchBoxStyle}
-          //Hint: Implement this
         />
-        <button style={searchButtonStyle}>Search Button</button>
-        <button data-testid="candidate-card" style={listAllButtonStyle}>
+        <button style={searchButtonStyle} onClick={handleSearch}>Search Button</button>
+        <button data-testid="candidate-card" style={listAllButtonStyle} onClick={handleListAll}>
           List All
         </button>
       </div>
       {filteredCandidates.length === 0 ? (
-        // Implement this
-        console.log()
+        <p>No candidates found.</p>
       ) : (
-        // Fix and Implement this
-
-        {/* <div
+        <div
           style={{
             display: "flex",
             flexWrap: "wrap",
-            justifyContent: "flex-start",
+            justifyContent: "center",
+            marginTop: "400px",
           }}
         >
+        {filteredCandidates.map((candidate) => (
           <div
             key={candidate.id}
             style={{
@@ -123,18 +129,21 @@ function CandidateList() {
             <p>Name: {candidate.name}</p>
             <p>Email: {candidate.email}</p>
             <div>
-              <p style={{ fontWeight: "bold" }}>Skills</p>
-              <div style={{ display: "flex", flexWrap: "wrap" }}>
-                <div key={index} style={skillsStyle}>
-                   // Hint: Implement this
+                <p style={{ fontWeight: "bold" }}>Skills</p>
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                 {candidate.skills.map((skill, index) => (
+                    <div key={index} style={skillsStyle}>
+                      {skill}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
-        </div> */}
+          ))}
+        </div>
       )}
     </div>
-  );
-}
+ );
+};
 
 export default CandidateList;
