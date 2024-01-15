@@ -84,7 +84,14 @@ function CandidateRegistration() {
 
   const [registrationStatus, setRegistrationStatus] = useState(null);
   const [candidates, setCandidates] = useState([]);
-  const highlightInput = true;
+  const [highlightInput, setHighlightInput] = useState(false);
+
+  const handleEmailValidity = (e) => {
+    const emailInput = e.target;
+    const isEmailValid = emailInput.validity.valid;
+
+    setHighlightInput(!isEmailValid);
+  };
   
   const handleSkillChange = (e) => {
     setFormData({ ...formData, skill: e.target.value });
@@ -148,6 +155,7 @@ function CandidateRegistration() {
                 name="email"
                 placeholder="Email"
                 data-testid="form-input-email"
+                onBlur={handleEmailValidity}
                 required
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 style={{ ...inputStyle, ...(highlightInput ? highlight : {}) }}
