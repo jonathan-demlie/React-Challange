@@ -90,7 +90,14 @@ function CandidateRegistration() {
     setFormData({ ...formData, skill: e.target.value });
   };
   const handleAddSkill = () => {
-    setFormData({ ...formData, skills: [...formData.skills, formData.skill], skill: "" });
+    // setFormData({ ...formData, skills: [...formData.skills, formData.skill], skill: "" });
+    const updatedSkills = [...formData.skills, formData.skill];
+
+    if (updatedSkills.length <= 5) {
+        setFormData({ ...formData, skills: updatedSkills, skill: "" });
+    } else {
+        alert("You can only add up to 5 skills.");
+    }
   };
 
  
