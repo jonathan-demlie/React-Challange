@@ -61,7 +61,9 @@ function CandidateList({ candidates }) {
   const [filteredCandidates, setFilteredCandidates] = useState([]);
 
   useEffect(() => {
-    setFilteredCandidates(candidates);
+    if (candidates) {
+      setFilteredCandidates(candidates);
+    }
   }, [candidates]);
 
   const handleSearch = () => {
@@ -73,7 +75,9 @@ function CandidateList({ candidates }) {
   };
 
   const handleListAll = () => {
-    setFilteredCandidates(candidates);
+    if (candidates) {
+      setFilteredCandidates(candidates);
+    }
   };
 
   return (
@@ -81,7 +85,7 @@ function CandidateList({ candidates }) {
       <div style={searchBoxContainerStyle}>
         <input
           type="text"
-          placeholder="Search by name or skill"
+          placeholder="search skills"
           value={searchText}
           style={searchBoxStyle}
           onChange={(e) => setSearchText(e.target.value)}
@@ -93,7 +97,7 @@ function CandidateList({ candidates }) {
           List All
         </button>
       </div>
-      {filteredCandidates.length === 0 ? (
+      {filteredCandidates && filteredCandidates.length === 0 ? (
         <p>No candidates found.</p>
       ) : (
         <div
