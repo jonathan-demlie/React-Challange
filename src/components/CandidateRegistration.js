@@ -1,3 +1,4 @@
+// CandidateRegistration.jsx
 import React, { useState, useEffect } from "react";
 
 const centerContainerStyle = {
@@ -144,18 +145,16 @@ function CandidateRegistration({ handleRegistration }) {
   return (
     <div style={centerContainerStyle}>
       <div style={formBoxStyle}>
-        <div data-test-id="registration-component" style={formBoxStyle}>
+        <div data-testid="registration-component" style={formBoxStyle}>
           <form onSubmit={handleFormSubmit}>
             <div className="form-group" style={formGroupStyle}>
               <input
                 type="text"
                 name="name"
                 placeholder="Name"
-
                 required
-                data-test-id="form-input-name"
+                data-testid="form-input-name"
                 style={inputStyle}
-                
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
@@ -167,7 +166,7 @@ function CandidateRegistration({ handleRegistration }) {
                 placeholder="Email"
                 required
                 style={inputStyle}
-                data-test-id="form-input-email"
+                data-testid="form-input-email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               />
@@ -181,7 +180,7 @@ function CandidateRegistration({ handleRegistration }) {
                 required
                 style={inputStyle}
                 value={formData.role}
-                data-test-id="form-input-role"
+                data-testid="form-input-role"
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
               />
             </div>
