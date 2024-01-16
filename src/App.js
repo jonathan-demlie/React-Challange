@@ -12,6 +12,7 @@ function App() {
     setCandidates([...candidates, newCandidate]);
   };
 
+  //this is functional component
   return (
     <Router>
       <Navbar />
