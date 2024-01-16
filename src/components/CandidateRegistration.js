@@ -1,4 +1,3 @@
-// CandidateRegistration.jsx
 import React, { useState, useEffect } from "react";
 
 const centerContainerStyle = {
@@ -112,6 +111,7 @@ function CandidateRegistration({ handleRegistration }) {
     if (isEmailExist(formData.email)) {
       setEmailError("Email already exists.");
       setFormMessage("");
+      setFormSuccessMessage("");
       return;
     }
 
@@ -170,7 +170,6 @@ function CandidateRegistration({ handleRegistration }) {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               />
-              {emailError && <p style={{ color: "red", marginBottom: "10px" }}>{emailError}</p>}
             </div>
             <div className="form-group" style={formGroupStyle}>
               <input
@@ -227,6 +226,7 @@ function CandidateRegistration({ handleRegistration }) {
             </div>
             <div>
               <p style={{ color: "red", marginTop: "10px" }}>{formMessage}</p>
+              <p style={{ color: "red", marginTop: "10px" }}>{emailError}</p>
               <p style={{ color: "green", marginTop: "10px" }}>{formSuccessMessage}</p>
             </div>
           </form>
