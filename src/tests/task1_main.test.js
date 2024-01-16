@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import CandidateRegistration from "../components/CandidateRegistration";
 import App from "../App";
 
+
 describe("Home Component", () => {
   it("home component renders without crashing", () => {
     render(
