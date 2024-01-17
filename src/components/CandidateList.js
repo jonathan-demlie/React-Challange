@@ -65,22 +65,43 @@ const listAllButtonStyle = {
 
 function CandidateList() {
   const [searchText, setSearchText] = useState("");
-  const [filteredCandidates, setFilteredCandidates] = useState("");
+  const [filteredCandidates, setFilteredCandidates] = useState([]);
   const [candidates, setCandidates] = useState([]);
 
   useEffect(() => {
-    const storedCandidates = localStorage.getItem("candidates");
+    const storedCandidates = JSON.parse(localStorage.getItem("candidates"));
     if (storedCandidates) {
-      // Hint: Implement this
+      setCandidates(storedCandidates);
+      setFilteredCandidates(storedCandidates); // Initially set filtered candidates to all candidates
     }
   }, []);
+  // Function to handle adding a new candidate
+  const handleAddCandidate = (newCandidate) => {
+    // Update the candidate list with the new candidate
+    setCandidates([...candidates, newCandidate]);
 
-  const handleSearch = () => {
-    // Hint: Implement this
+    // Reset the Candidate Registration Form after successfully adding a new candidate
+    // You need to implement the logic to reset the form inputs here
+    // resetForm();
   };
 
-  const handleListAll = () => {
+  const handleSearch = (e) => {
     // Hint: Implement this
+    e.preventDefault();
+    console.log("Search Text:", searchText);
+    const filtered = candidates.filter((candidate) =>
+      candidate.skills.some((skill) =>
+        skill.toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
+    setFilteredCandidates(filtered);
+  };
+
+  // Hint: Implement this
+  const handleListAll = () => {
+    // Clear search text and show all candidates
+    setSearchText("");
+    setFilteredCandidates(candidates);
   };
 
   return (
@@ -89,50 +110,54 @@ function CandidateList() {
         <input
           type="text"
           placeholder="search skills"
-          value=""
+          value={searchText}
           style={searchBoxStyle}
           //Hint: Implement this
+          onChange={(e) => setSearchText(e.target.value)}
         />
-        <button style={searchButtonStyle}>Search Button</button>
-        <button data-testid="candidate-card" style={listAllButtonStyle}>
+        <button onClick={handleSearch} style={searchButtonStyle}>
+          Search Button
+        </button>
+        <button
+          onClick={handleListAll}
+          data-testid="candidate-card"
+          style={listAllButtonStyle}
+        >
           List All
         </button>
       </div>
-      {filteredCandidates.length === 0 ? (
-        // Implement this
-        console.log()
-      ) : (
-        // Fix and Implement this
-
-        {/* <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "flex-start",
-          }}
-        >
-          <div
-            key={candidate.id}
-            style={{
-              ...profileCardStyle,
-              textAlign: "left",
-              marginRight: "10px",
-            }}
-          >
-            <h2 style={{ marginBottom: "10px" }}>Role: {candidate.role}</h2>
-            <p>Name: {candidate.name}</p>
-            <p>Email: {candidate.email}</p>
-            <div>
-              <p style={{ fontWeight: "bold" }}>Skills</p>
-              <div style={{ display: "flex", flexWrap: "wrap" }}>
-                <div key={index} style={skillsStyle}>
-                   // Hint: Implement this
+      <div
+        style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
+      >
+        {filteredCandidates.length === 0 ? (
+          <p>No candidates found</p>
+        ) : (
+          filteredCandidates.map((candidate, index) => (
+            <div
+              key={index}
+              style={{
+                ...profileCardStyle,
+                textAlign: "left",
+                marginRight: "10px",
+              }}
+            >
+              <h2 style={{ marginBottom: "10px" }}>Role: {candidate.role}</h2>
+              <p>Name: Candidate {index + 1}</p>
+              <p>Email: {candidate.email}</p>
+              <div>
+                <p style={{ fontWeight: "bold" }}>Skills</p>
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                  {candidate.skills.map((skill, idx) => (
+                    <div key={idx} style={skillsStyle}>
+                      {skill}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
-        </div> */}
-      )}
+          ))
+        )}
+      </div>
     </div>
   );
 }
