@@ -54,4 +54,5 @@ function Navbar({ candidateCount }) {
   );
 }
 
+
 export default Navbar;
