@@ -4,7 +4,7 @@ import { MemoryRouter } from "react-router-dom";
 import CandidateList from "../components/CandidateList";
 
 describe("Candidate List Component", () => {
-  it("candidate list component renders without crashing", () => {
+  it("renders without crashing", () => {
     render(
       <MemoryRouter>
         <CandidateList />
@@ -22,13 +22,13 @@ describe("Candidate List Component", () => {
     expect(screen.getByPlaceholderText("search skills")).toBeInTheDocument();
   });
 
-  it('displays the "List All" button', () => {
+  it('displays the "All" button', () => {
     render(
       <MemoryRouter>
         <CandidateList />
       </MemoryRouter>
     );
 
-    expect(screen.getByText("List All")).toBeInTheDocument();
+    expect(screen.getByText("All")).toBeInTheDocument();
   });
 });

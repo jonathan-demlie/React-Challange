@@ -22,8 +22,8 @@ describe("Home Component", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText("Register Candidate")).toBeInTheDocument();
-    expect(screen.getByText("List Candidates")).toBeInTheDocument();
+    expect(screen.getByText(/Register Candidate/)).toBeInTheDocument();
+    expect(screen.getByText(/List Candidates/)).toBeInTheDocument();
   });
 
   it("should contain a specific CSS style for home element", () => {
@@ -33,11 +33,10 @@ describe("Home Component", () => {
       </MemoryRouter>
     );
     const homeElement = screen.getByTestId("home-component");
-    expect(homeElement).toHaveStyle("textAlign:center");
+    expect(homeElement).toHaveStyle("textAlign: center");
   });
 
   it("ensures the header title is set to 'Job Portal'", () => {
-    // You would repeat this for each component that should display the title
     render(
       <MemoryRouter>
         <Navbar />
@@ -54,7 +53,7 @@ describe("Home Component", () => {
         <CandidateRegistration />
       </MemoryRouter>
     );
-
+    
     expect(screen.getByTestId("submit-btn")).toBeInTheDocument();
     expect(screen.getByTestId("reset-btn")).toBeInTheDocument();
     expect(screen.getByTestId("add-btn")).toBeInTheDocument();

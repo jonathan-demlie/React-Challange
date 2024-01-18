@@ -2,14 +2,22 @@ import React, { useState, useEffect } from 'react';
 
 // Base styles for the component
 const alertMessage = {
-  marginTop: '5px'
-}
+  marginTop: '5px',
+};
+const redInputStyle = {
+  border: '1px solid red',
+  backgroundColor: 'red',
+  width: '100%',
+  padding: '10px',
+  borderRadius: '5px',
+  // border: '1px solid #999',
+  boxSizing: 'border-box',
 
-const highlight = {
-  border: '2px solid red',
-  backgroundColor: 'red'
-}
+};
 
+const existingEmailStyle = {
+  ...redInputStyle,
+};
 
 const centerContainerStyle = {
   display: 'flex',
@@ -55,14 +63,14 @@ const inputStyle = {
   width: '100%',
   padding: '10px',
   borderRadius: '5px',
-  border: '1px solid #ccc',
+  border: '1px solid #999',
   boxSizing: 'border-box',
 };
 
 const skillTagStyle = {
   backgroundColor: '#333',
   color: 'white',
-  borderRadius: '0',
+  borderRadius: '5px',
   padding: '5px 10px',
   margin: '0 5px',
 };
@@ -75,46 +83,92 @@ const buttonGroupStyle = {
 
 function CandidateRegistration() {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    role: "",
-    skill: "",
+    name: '',
+    email: '',
+    role: '',
+    skill: '',
     skills: [],
   });
 
   const [registrationStatus, setRegistrationStatus] = useState(null);
   const [candidates, setCandidates] = useState([]);
-  const highlightInput = true;
-  
+  const [highlightInput, setHighlightInput] = useState(false);
+
   const handleSkillChange = (e) => {
-  };
-  const handleAddSkill = () => {
-   
+    setFormData({ ...formData, skill: e.target.value });
   };
 
- 
+  const handleAddSkill = () => {
+    if (formData.skills.length < 5 && formData.skill.trim() !== '') {
+      setFormData({
+        ...formData,
+        skills: [...formData.skills, formData.skill.trim()],
+        skill: '',
+      });
+    }
+  };
 
   const handleFormSubmit = (e) => {
- 
+    e.preventDefault();
+
+    // Validation: Ensure name, email, and role are not empty
+    if (formData.name.trim() === '' || formData.email.trim() === '' || formData.role.trim() === '') {
+      setHighlightInput(true);
+      return;
+    }
+
+    // Validation: Ensure at least one skill is added
+    if (formData.skills.length === 0) {
+      setHighlightInput(true);
+      return;
+    }
+
+    // Validation: Ensure a maximum of 5 skills
+    if (formData.skills.length > 5) {
+      setRegistrationStatus('You can add only a maximum of 5 skills.');
+      return;
+    }
+    
+    // Check if the email already exists
+    if (candidates.some(candidate => candidate.email === formData.email.trim())) {
+      setRegistrationStatus('Email already exists');
+      setHighlightInput(true);
+      return;
+    }
+      
+    // Add the candidate to the list
+    setCandidates([...candidates, formData]);
+
+    // Reset form data and highlight
+    setFormData({
+      name: '',
+      email: '',
+      role: '',
+      skill: '',
+      skills: [],
+    });
+    setHighlightInput(false);
+
+    // Set registration status
+    setRegistrationStatus('Candidate profile created');
   };
 
-
   useEffect(() => {
-    const storedCandidates = localStorage.getItem("candidates");
+    const storedCandidates = localStorage.getItem('candidates');
     if (storedCandidates) {
-      // Hint: Implement this
+      setCandidates(JSON.parse(storedCandidates));
     }
   }, []);
 
   useEffect(() => {
-    // Save candidates to localStorage whenever candidates state changes
+    localStorage.setItem('candidates', JSON.stringify(candidates));
   }, [candidates]);
 
   return (
     <div style={centerContainerStyle}>
       <div style={formBoxStyle}>
-        <div data-testid="registration-component" style={formBoxStyle}>
-          <form onSubmit={handleFormSubmit} >
+        <div data-testid="registration-component">
+          <form onSubmit={handleFormSubmit} data-testid="registration-form">
             <div className="form-group" style={formGroupStyle}>
               <input
                 type="text"
@@ -123,7 +177,8 @@ function CandidateRegistration() {
                 required
                 style={inputStyle}
                 data-testid="form-input-name"
-               
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
             </div>
             <div className="form-group" style={formGroupStyle}>
@@ -131,19 +186,23 @@ function CandidateRegistration() {
                 type="email"
                 name="email"
                 placeholder="Email"
-                data-testid="form-input-name"
                 required
-                style={{ ...inputStyle, ...(highlightInput ? highlight : {}) }}
+                style={highlightInput ? existingEmailStyle : inputStyle}
+                data-testid="form-input-email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               />
             </div>
             <div className="form-group" style={formGroupStyle}>
               <input
                 type="text"
                 name="role"
-              
                 placeholder="Role"
                 required
                 style={inputStyle}
+                data-testid="form-input-role"
+                value={formData.role}
+                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
               />
             </div>
             <div className="form-group" style={formGroupStyle}>
@@ -153,19 +212,22 @@ function CandidateRegistration() {
                 name="skill"
                 placeholder="Skill"
                 style={inputStyle}
+                value={formData.skill}
+                onChange={handleSkillChange}
               />
               <button
                 type="button"
                 data-testid="add-btn"
                 style={addSkillButtonStyle}
+                onClick={handleAddSkill}
               >
                 Add Skill
               </button>
             </div>
             <div>
               {formData.skills.map((skill, index) => (
-                <span data-testid="skill-tag" style={skillTagStyle}>
-                  {/* Implement this */}
+                <span key={index} data-testid="skill-tag" style={skillTagStyle}>
+                  {skill}
                 </span>
               ))}
             </div>
@@ -174,17 +236,21 @@ function CandidateRegistration() {
                 data-testid="submit-btn"
                 type="submit"
                 style={sharpEdgeButtonStyle}
+                disabled={!formData.name || !formData.email || !formData.role || formData.skills.length === 0}
               >
                 Register
               </button>
               <button
                 data-testid="reset-btn"
                 style={sharpEdgeButtonStyle}
+                type="button"
+                onClick={() => setFormData({ ...formData, skills: [] })}
               >
                 Reset
               </button>
             </div>
           </form>
+          {registrationStatus && <p style={alertMessage} data-testid="alert-message">{registrationStatus}</p>}
         </div>
       </div>
     </div>
