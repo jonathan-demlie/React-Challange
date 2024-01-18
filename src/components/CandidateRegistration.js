@@ -84,30 +84,102 @@ function CandidateRegistration() {
 
   const [registrationStatus, setRegistrationStatus] = useState(null);
   const [candidates, setCandidates] = useState([]);
+  const [candidateCount, setCandidateCount] = useState(0);
   const highlightInput = true;
   
+  const inputHandler=(e)=>{
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+      
+}
+
   const handleSkillChange = (e) => {
+    const skill = e.target.value;
+    setFormData((prevState) =>({
+        ...prevState,
+        skill,
+        // skills: [...prevState.skills, skill]
+    })
+    )
   };
+
   const handleAddSkill = () => {
+   if(formData.skill.trim() === ""){
+      return;
+    }
+
+    if (formData.skills.length >= 5) {
+      alert('You can add only a maximum of 5 skills.');      return;
+      
+    }
+  
+   
+    setFormData((prevState) => ({
+      ...prevState,
+      skills: [...prevState.skills, formData.skill.trim()],
+      skill:"",
+    }));
    
   };
 
  
 
   const handleFormSubmit = (e) => {
- 
+    e.preventDefault();
+    
+    const existingCandidate = candidates.find(
+      (candidate) => candidate.email === formData.email 
+    );
+
+    if (existingCandidate) {
+      setRegistrationStatus( 'Email already exists');
+    }
+
+    else {
+      const newCandidate = {
+        name: formData.name,
+        email: formData.email,
+        role: formData.role,
+        skills: formData.skills
+      }
+      console.log(newCandidate);
+      setCandidates([...candidates,newCandidate])
+      setCandidateCount((prevCount) => prevCount + 1);
+
+      setFormData({
+        name: "",
+        email: "",
+        role: "",
+        skill: "",
+        skills: [],
+      });
+
+      setRegistrationStatus( "Candidate Profile Created");
+      // localStorage.setItem( "candidates",JSON.stringify("candidates"))
+    };
   };
 
+  const handleResetForm = () => {
+    setFormData({ name: "", email: "", role: "", skills: [] });
+    setRegistrationStatus(null);
+  };
 
   useEffect(() => {
     const storedCandidates = localStorage.getItem("candidates");
     if (storedCandidates) {
       // Hint: Implement this
+      const parsedCandidates = JSON.parse(storedCandidates);
+      setCandidates(parsedCandidates);
+      setCandidateCount(parsedCandidates.length);
     }
   }, []);
 
   useEffect(() => {
     // Save candidates to localStorage whenever candidates state changes
+    localStorage.setItem("candidates",JSON.stringify(candidates))
+     setCandidateCount(candidates.length);
   }, [candidates]);
 
   return (
@@ -117,6 +189,8 @@ function CandidateRegistration() {
           <form onSubmit={handleFormSubmit} >
             <div className="form-group" style={formGroupStyle}>
               <input
+               value={formData.name}
+               onChange={inputHandler}
                 type="text"
                 name="name"
                 placeholder="Name"
@@ -128,19 +202,23 @@ function CandidateRegistration() {
             </div>
             <div className="form-group" style={formGroupStyle}>
               <input
+               value={formData.email}
+               onChange={inputHandler}
                 type="email"
                 name="email"
                 placeholder="Email"
-                data-testid="form-input-name"
+                data-testid="form-input-email"
                 required
                 style={{ ...inputStyle, ...(highlightInput ? highlight : {}) }}
               />
             </div>
             <div className="form-group" style={formGroupStyle}>
               <input
+              value={formData.role}
+              onChange={inputHandler}
                 type="text"
                 name="role"
-              
+                data-testid="form-input-role"
                 placeholder="Role"
                 required
                 style={inputStyle}
@@ -152,11 +230,14 @@ function CandidateRegistration() {
                 type="text"
                 name="skill"
                 placeholder="Skill"
+                value={formData.skill}
+                onChange={handleSkillChange}
                 style={inputStyle}
               />
               <button
                 type="button"
                 data-testid="add-btn"
+                onClick={handleAddSkill}
                 style={addSkillButtonStyle}
               >
                 Add Skill
@@ -164,8 +245,9 @@ function CandidateRegistration() {
             </div>
             <div>
               {formData.skills.map((skill, index) => (
-                <span data-testid="skill-tag" style={skillTagStyle}>
+                <span key={index } data-testid="skill-tag" style={skillTagStyle}>
                   {/* Implement this */}
+                  {skill}
                 </span>
               ))}
             </div>
@@ -179,12 +261,25 @@ function CandidateRegistration() {
               </button>
               <button
                 data-testid="reset-btn"
+                onClick={handleResetForm}
                 style={sharpEdgeButtonStyle}
               >
                 Reset
               </button>
             </div>
           </form>
+
+          {registrationStatus && (
+            <div style={alertMessage}>
+              <p data-test-id="status">{registrationStatus}</p>
+            </div>
+        
+          )}
+
+          <div >
+        <p>Candidates: {candidateCount}</p>
+      </div>
+
         </div>
       </div>
     </div>

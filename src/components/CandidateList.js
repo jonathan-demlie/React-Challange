@@ -72,15 +72,24 @@ function CandidateList() {
     const storedCandidates = localStorage.getItem("candidates");
     if (storedCandidates) {
       // Hint: Implement this
+      setCandidates(JSON.parse(storedCandidates))
     }
   }, []);
 
   const handleSearch = () => {
     // Hint: Implement this
+    const filtered = candidates.filter(candidate =>
+      candidate.skills.some(skill =>
+       skill.toLowerCase().includes(searchText.toLowerCase())
+     )
+   );
+   setFilteredCandidates(filtered);
   };
 
   const handleListAll = () => {
     // Hint: Implement this
+    setSearchText("");
+    setFilteredCandidates(candidates);
   };
 
   return (
@@ -89,30 +98,33 @@ function CandidateList() {
         <input
           type="text"
           placeholder="search skills"
-          value=""
+          value={searchText}
           style={searchBoxStyle}
           //Hint: Implement this
+          onChange={(e) => setSearchText(e.target.value)}
         />
-        <button style={searchButtonStyle}>Search Button</button>
-        <button data-testid="candidate-card" style={listAllButtonStyle}>
+        <button style={searchButtonStyle} onClick={handleSearch}>Search Button</button>
+        <button data-testid="candidate-card" style={listAllButtonStyle} onClick={handleListAll}>
           List All
         </button>
       </div>
       {filteredCandidates.length === 0 ? (
         // Implement this
-        console.log()
+        console.log("No candidates found")
       ) : (
         // Fix and Implement this
 
-        {/* <div
+         <div
           style={{
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "flex-start",
           }}
         >
+          {filteredCandidates.map((candidate,index) => (
           <div
-            key={candidate.id}
+            key={index}
+            // key={candidate.id}
             style={{
               ...profileCardStyle,
               textAlign: "left",
@@ -125,13 +137,18 @@ function CandidateList() {
             <div>
               <p style={{ fontWeight: "bold" }}>Skills</p>
               <div style={{ display: "flex", flexWrap: "wrap" }}>
+              {candidate.skills.map((skill,index) => (
                 <div key={index} style={skillsStyle}>
-                   // Hint: Implement this
+                   {/* // Hint: Implement this */}
+                   {skill}
                 </div>
+
+                 ))}
               </div>
             </div>
           </div>
-        </div> */}
+           ))}
+        </div> 
       )}
     </div>
   );
