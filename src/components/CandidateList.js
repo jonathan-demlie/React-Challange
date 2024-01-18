@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-// Base styles for the component
+// CandidateList Styles for Job portal
 const searchContainerStyle = {
   display: "flex",
   flexDirection: "column",
@@ -62,79 +62,82 @@ const listAllButtonStyle = {
   color: "white",
   border: "none",
 };
-
+//  Function Candidate list for job portal 
 function CandidateList() {
   const [searchText, setSearchText] = useState("");
-  const [filteredCandidates, setFilteredCandidates] = useState("");
+  const [filteredCandidates, setFilteredCandidates] = useState([]);
   const [candidates, setCandidates] = useState([]);
 
   useEffect(() => {
     const storedCandidates = localStorage.getItem("candidates");
     if (storedCandidates) {
-      // Hint: Implement this
+      const parsedCandidates = JSON.parse(storedCandidates);
+      setCandidates(parsedCandidates);
+      setFilteredCandidates(parsedCandidates);
     }
   }, []);
 
+     // Arrow Functions for More Functionalities 
   const handleSearch = () => {
-    // Hint: Implement this
+    const filtered = candidates.filter(candidate =>
+      candidate.skills.includes(searchText)
+    );
+    setFilteredCandidates(filtered);
   };
 
   const handleListAll = () => {
-    // Hint: Implement this
+    setFilteredCandidates(candidates);
   };
 
   return (
     <div style={{ ...searchContainerStyle, alignItems: "center" }}>
       <div style={searchBoxContainerStyle}>
         <input
+          data-testid="search-input"
           type="text"
           placeholder="search skills"
-          value=""
+          value={searchText}
           style={searchBoxStyle}
-          //Hint: Implement this
+          onChange={(e) => setSearchText(e.target.value)}
         />
-        <button style={searchButtonStyle}>Search Button</button>
-        <button data-testid="candidate-card" style={listAllButtonStyle}>
-          List All
+        <button style={searchButtonStyle} onClick={handleSearch} >
+          Search
+        </button>
+        <button style={listAllButtonStyle} onClick={handleListAll} data-testid="search-all">
+          All
         </button>
       </div>
+      <p data-testid="profiles-found-tag">{`${filteredCandidates.length} profiles found`}</p>
       {filteredCandidates.length === 0 ? (
-        // Implement this
-        console.log()
+        <p>No candidates found.</p>
       ) : (
-        // Fix and Implement this
-
-        {/* <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "flex-start",
-          }}
-        >
-          <div
-            key={candidate.id}
-            style={{
-              ...profileCardStyle,
-              textAlign: "left",
-              marginRight: "10px",
-            }}
-          >
-            <h2 style={{ marginBottom: "10px" }}>Role: {candidate.role}</h2>
-            <p>Name: {candidate.name}</p>
-            <p>Email: {candidate.email}</p>
-            <div>
-              <p style={{ fontWeight: "bold" }}>Skills</p>
-              <div style={{ display: "flex", flexWrap: "wrap" }}>
-                <div key={index} style={skillsStyle}>
-                   // Hint: Implement this
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-start" }}>
+          {filteredCandidates.map((candidate, index) => (
+            <div
+              key={index}
+              style={{ ...profileCardStyle, textAlign: "left", marginRight: "10px" }}
+              data-testid="profile-card"
+            >
+              <h2 style={{ marginBottom: "10px" }}>Role: {candidate.role}</h2>
+              <p>Name: {candidate.name}</p>
+              <p>Email: {candidate.email}</p>
+              <div>
+                <p style={{ fontWeight: "bold" }}>Skills</p>
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                  {candidate.skills.map((skill, skillIndex) => (
+                    <div key={skillIndex} style={skillsStyle}>
+                      {skill}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
-        </div> */}
+          ))}
+        </div>
       )}
     </div>
   );
 }
+
 
 export default CandidateList;
