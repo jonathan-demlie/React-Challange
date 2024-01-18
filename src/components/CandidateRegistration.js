@@ -65,14 +65,6 @@ const skillTagStyle = {
   padding: '5px 10px',
   margin: '0 5px',
 };
-
-const footerStyle = {
-  backgroundColor: 'black',
-  padding: '10px',
-  color: 'white',
-  marginTop: '20px',
-};
-
 const buttonGroupStyle = {
   display: 'flex',
   justifyContent: 'space-between',

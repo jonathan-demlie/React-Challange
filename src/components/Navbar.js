@@ -37,15 +37,15 @@ function Navbar({ candidateCount }) {
         </h1>
       </div>
       <div>
-        <Link to="/" style={linkStyle}>
+        <Link to="/" data-testid ="nav-home-btn" style={linkStyle}>
           Home
         </Link>
         {currentPage === "/candidate/registration" ? (
-          <Link to="/candidate/list" style={linkStyle}>
+          <Link to="/candidate/list" data-testid="nav-list-btn" style={linkStyle}>
             Candidate List {candidateCount}
           </Link>
         ) : (
-          <Link to="/candidate/registration" style={linkStyle}>
+          <Link to="/candidate/registration" data-testid="nav-registration-btn" style={linkStyle}>
             Candidate Registration
           </Link>
         )}

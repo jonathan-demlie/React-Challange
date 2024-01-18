@@ -96,6 +96,7 @@ function CandidateList({ candidates }) {
         <input
           type="text"
           placeholder="search skills"
+          data-testid="search-input"
           value={searchText}
           style={searchBoxStyle}
           onChange={handleInputChange}
@@ -103,7 +104,7 @@ function CandidateList({ candidates }) {
         <button style={searchButtonStyle} onClick={handleSearch}>
           Search Button
         </button>
-        <button style={listAllButtonStyle} onClick={handleListAll}>
+        <button data-testid="search-all" style={listAllButtonStyle} onClick={handleListAll}>
           List All
         </button>
       </div>
@@ -124,7 +125,7 @@ function CandidateList({ candidates }) {
                 ...profileCardStyle,
                 textAlign: "left",
                 marginRight: "10px",
-              }}
+              }} data-testid="profiles-found-tag"
             >
               <h2 style={{ marginBottom: "10px" }}>Role: {candidate.role}</h2>
               <p>Name: {candidate.name}</p>
