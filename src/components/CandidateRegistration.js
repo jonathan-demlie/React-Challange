@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"
 
 // Base styles for the component
 const alertMessage = {
@@ -95,11 +94,11 @@ function CandidateRegistration() {
 
   const handleAddSkill = () => {
     if (formData.skill && formData.skills.length < 5) {
-      setFormData({
-        ...formData,
-        skills: [...formData.skills, formData.skill],
+      setFormData((prevData) => ({
+        ...prevData,
+        skills: [...prevData.skills, formData.skill],
         skill: "",
-      });
+      }));
     }
   };
 
@@ -133,7 +132,6 @@ function CandidateRegistration() {
       }
     }
   }, []);
-  
 
   useEffect(() => {
     localStorage.setItem("candidates", JSON.stringify(candidates));
@@ -148,6 +146,8 @@ function CandidateRegistration() {
               <input
                 type="text"
                 name="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="Name"
                 required
                 style={inputStyle}
@@ -158,6 +158,8 @@ function CandidateRegistration() {
               <input
                 type="email"
                 name="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="Email"
                 data-testid="form-input-email"
                 required
@@ -168,6 +170,8 @@ function CandidateRegistration() {
               <input
                 type="text"
                 name="role"
+                value={formData.role}
+                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                 data-testid="form-input-role"
                 placeholder="Role"
                 required
@@ -179,6 +183,8 @@ function CandidateRegistration() {
                 data-testid="form-input-skill"
                 type="text"
                 name="skill"
+                value={formData.skill}
+                onChange={(e) => setFormData({ ...formData, skill: e.target.value })}
                 placeholder="Skill"
                 style={inputStyle}
               />
@@ -194,28 +200,31 @@ function CandidateRegistration() {
             </div>
             <div>
               {formData.skills.map((skill, index) => (
-                <span data-testid="skill-tag" style={skillTagStyle}>
-                  {/* Implement this */}
+                <span key={index} data-testid="skill-tag" style={skillTagStyle}>
+                  {skill}
                 </span>
               ))}
             </div>
             <div style={buttonGroupStyle}>
-              <Link to = "candidate/list">
-              <button
-                data-testid="submit-btn"
-                type="submit"
-                style={sharpEdgeButtonStyle}
-                disabled={
-                  !formData.name ||
-                  !formData.role ||
-                  !formData.email ||
-                  formData.skills.length > 0
-                }
-              >
-                Register
-              </button>
-              </Link>
-              
+                <button
+                  data-testid="submit-btn"
+                  type="submit"
+                  style={sharpEdgeButtonStyle}
+                  disabled={
+                    !formData.name ||
+                    !formData.role ||
+                    !formData.email ||
+                    formData.skills.length > 0
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleFormSubmit(e);
+                    window.location.href = "/candidate/list";
+                  }}
+                >
+                  Register
+                </button>
+
               <button
                 data-testid="reset-btn"
                 type="reset"
