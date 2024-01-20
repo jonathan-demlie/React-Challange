@@ -202,7 +202,7 @@ function CandidateRegistration() {
                 value={formData.email}
                 onChange={handleFormdata}
                 placeholder="Email"
-                data-testid="form-input-name"
+                data-testid="form-input-email"
                 required
                 style={{ ...inputStyle, ...(highlightInput ? highlight : {}) }}
               />
@@ -213,6 +213,7 @@ function CandidateRegistration() {
                 pattern="[A-Za-z0-9\s]+"
                 name="role"
                 value={formData.role}
+                data-testid="form-input-role"
                 onChange={handleFormdata}
                 placeholder="Role"
                 required
