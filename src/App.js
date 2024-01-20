@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Home from "./components/Home";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -6,16 +6,23 @@ import CandidateList from "./components/CandidateList";
 import CandidateRegistration from "./components/CandidateRegistration";
 
 function App(props) {
+  const [candidateCount, setCandidateCount] = useState(0);
+
+  const updateCountFunction = (count) => {
+    setCandidateCount(count);
+  };
+
   return (
     <Router>
-      <Navbar />
+      <Navbar candidateCount={candidateCount} />
       <Routes>
         <Route path="/" element={<Home />} exact />
         <Route
           path="/candidate/registration"
           element={<CandidateRegistration />}
           exact
-        />  
+          updateCount={updateCountFunction}
+        />
         <Route path="/candidate/list" element={<CandidateList />} />
       </Routes>
     </Router>
