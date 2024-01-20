@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const navbarStyle = {
@@ -22,12 +22,13 @@ const centerHeadingStyle = {
   marginLeft: "625px",
   flex: "1", // Allow it to take up the remaining space
 };
-
 function Navbar({ candidateCount }) {
   const location = useLocation();
   const [currentPage, setCurrentPage] = React.useState(location.pathname);
 
-  useLocation().pathname !== currentPage && setCurrentPage(location.pathname);
+  useEffect(() => {
+    setCurrentPage(location.pathname);
+  }, [location.pathname]);
 
   return (
     <div style={navbarStyle}>
@@ -37,21 +38,23 @@ function Navbar({ candidateCount }) {
         </h1>
       </div>
       <div>
-        <Link to="/" style={linkStyle}>
-          Home
-        </Link>
-        {currentPage === "/candidate/registration" ? (
-          <Link to="/candidate/list" style={linkStyle}>
-            Candidate List {candidateCount}
-          </Link>
-        ) : (
-          <Link to="/candidate/registration" style={linkStyle}>
-            Candidate Registration
-          </Link>
+        {currentPage !== "/" && (
+          <>
+            <Link to="/" style={linkStyle}>
+              Home
+            </Link>
+            {currentPage === "/candidate/registration" ? (
+              <Link to="/candidate/list" style={linkStyle}>
+                Candidate List {candidateCount}
+              </Link>
+            ) : (
+              <Link to="/candidate/registration" style={linkStyle}>
+                Candidate Registration
+              </Link>
+            )}
+          </>
         )}
       </div>
     </div>
   );
 }
-
-export default Navbar;
