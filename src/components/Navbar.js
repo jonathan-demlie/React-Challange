@@ -58,3 +58,36 @@ function Navbar({ candidateCount }) {
     </div>
   );
 }
+
+// function Navbar({ candidateCount }) {
+//   const location = useLocation();
+//   const [currentPage, setCurrentPage] = React.useState(location.pathname);
+
+//   useLocation().pathname !== currentPage && setCurrentPage(location.pathname);
+
+//   return (
+//     <div style={navbarStyle}>
+//       <div style={centerHeadingStyle}>
+//         <h1 className="header-title" data-testid="header-title">
+//           Job Portal
+//         </h1>
+//       </div>
+//       <div>
+//         <Link to="/" style={linkStyle}>
+//           Home
+//         </Link>
+//         {currentPage === "/candidate/registration" ? (
+//           <Link to="/candidate/list" style={linkStyle}>
+//             Candidate List {candidateCount}
+//           </Link>
+//         ) : (
+//           <Link to="/candidate/registration" style={linkStyle}>
+//             Candidate Registration
+//           </Link>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+export default Navbar;
