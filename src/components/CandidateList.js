@@ -62,25 +62,32 @@ const listAllButtonStyle = {
   color: "white",
   border: "none",
 };
-
-function CandidateList() {
-  const [searchText, setSearchText] = useState("");
-  const [filteredCandidates, setFilteredCandidates] = useState("");
-  const [candidates, setCandidates] = useState([]);
+function CandidateList({ candidates }) {
+  const [searchText, setSearchText] = useState('');
+  const [filteredCandidates, setFilteredCandidates] = useState([]);
 
   useEffect(() => {
-    const storedCandidates = localStorage.getItem("candidates");
-    if (storedCandidates) {
-      // Hint: Implement this
+    if (candidates) {
+      setFilteredCandidates(candidates);
     }
-  }, []);
+  }, [candidates]);
+
+  const handleInputChange = (e) => {
+    setSearchText(e.target.value);
+  };
 
   const handleSearch = () => {
-    // Hint: Implement this
+    const filtered = candidates.filter((candidate) =>
+      candidate.skills.some((skill) => skill.toLowerCase().includes(searchText.toLowerCase()))
+    );
+    setFilteredCandidates(filtered);
   };
 
   const handleListAll = () => {
-    // Hint: Implement this
+    setSearchText('');
+    if (candidates) {
+      setFilteredCandidates(candidates);
+    }
   };
 
   return (
@@ -89,49 +96,53 @@ function CandidateList() {
         <input
           type="text"
           placeholder="search skills"
-          value=""
+          data-testid="search-input"
+          value={searchText}
           style={searchBoxStyle}
-          //Hint: Implement this
+          onChange={handleInputChange}
         />
-        <button style={searchButtonStyle}>Search Button</button>
-        <button data-testid="candidate-card" style={listAllButtonStyle}>
+        <button style={searchButtonStyle} onClick={handleSearch}>
+          Search Button
+        </button>
+        <button data-testid="search-all" style={listAllButtonStyle} onClick={handleListAll}>
           List All
         </button>
       </div>
       {filteredCandidates.length === 0 ? (
-        // Implement this
-        console.log()
+        <p>Candidates not found.</p>
       ) : (
-        // Fix and Implement this
-
-        {/* <div
+        <div
           style={{
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "flex-start",
           }}
         >
-          <div
-            key={candidate.id}
-            style={{
-              ...profileCardStyle,
-              textAlign: "left",
-              marginRight: "10px",
-            }}
-          >
-            <h2 style={{ marginBottom: "10px" }}>Role: {candidate.role}</h2>
-            <p>Name: {candidate.name}</p>
-            <p>Email: {candidate.email}</p>
-            <div>
-              <p style={{ fontWeight: "bold" }}>Skills</p>
-              <div style={{ display: "flex", flexWrap: "wrap" }}>
-                <div key={index} style={skillsStyle}>
-                   // Hint: Implement this
+          {filteredCandidates.map((candidate) => (
+            <div
+              key={candidate.id}
+              style={{
+                ...profileCardStyle,
+                textAlign: "left",
+                marginRight: "10px",
+              }} data-testid="profiles-found-tag"
+            >
+              <h2 style={{ marginBottom: "10px" }}>Role: {candidate.role}</h2>
+              <p>Name: {candidate.name}</p>
+              <p>Email: {candidate.email}</p>
+              <div>
+                <p style={{ fontWeight: "bold" }}>Skills</p>
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                  {candidate.skills.map((skill, index) => (
+                    <div key={index} style={skillsStyle}>
+                      {skill}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
-        </div> */}
+          ))}
+        </div>
       )}
     </div>
   );
