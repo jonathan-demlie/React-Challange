@@ -1,9 +1,9 @@
-import React from "react";
-import Home from "./components/Home";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import CandidateList from "./components/CandidateList";
-import CandidateRegistration from "./components/CandidateRegistration";
+import React from "react"
+import Home from "./components/Home"
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
+import Navbar from "./components/Navbar"
+import CandidateList from "./components/CandidateList"
+import CandidateRegistration from "./components/CandidateRegistration"
 
 function App(props) {
   return (
@@ -15,11 +15,11 @@ function App(props) {
           path="/candidate/registration"
           element={<CandidateRegistration />}
           exact
-        />  
+        />
         <Route path="/candidate/list" element={<CandidateList />} />
       </Routes>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React from "react"
+import { Link, useLocation } from "react-router-dom"
 
 const homeStyle = {
   display: "flex",
@@ -8,14 +8,14 @@ const homeStyle = {
   justifyContent: "center",
   height: "30vh",
   textAlign: "center",
-};
+}
 
 const buttonContainerStyle = {
   display: "flex",
   justifyContent: "space-between",
   width: "500px",
   margin: "20px",
-};
+}
 
 const buttonStyle = {
   textDecoration: "none",
@@ -25,22 +25,26 @@ const buttonStyle = {
   borderRadius: "5px",
   cursor: "pointer",
   marginRight: "10px",
-};
+}
 
 function Home() {
   return (
     <div data-testid="home-component" style={homeStyle}>
       <div style={buttonContainerStyle}>
         {/* Hint: Implement this */}
-        <button data-testid="register-button" style={buttonStyle}>
-          Register Candidate
-        </button>
-        <button data-testid="list-button" style={buttonStyle}>
-          List Candidates
-        </button>
+        <Link to="/candidate/registration">
+          <button data-testid="register-button" style={buttonStyle}>
+            Register Candidate
+          </button>
+        </Link>
+        <Link to="/candidate/list">
+          <button data-testid="list-button" style={buttonStyle}>
+            List Candidates
+          </button>
+        </Link>
       </div>
     </div>
-  );
+  )
 }
 
-export default Home;
+export default Home
