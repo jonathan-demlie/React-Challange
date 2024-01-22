@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const navbarStyle = {
@@ -23,11 +24,24 @@ const centerHeadingStyle = {
   flex: "1", // Allow it to take up the remaining space
 };
 
-function Navbar({ candidateCount }) {
+function Navbar() {
   const location = useLocation();
   const [currentPage, setCurrentPage] = React.useState(location.pathname);
+  const [candidateCount, setCandidateCount] = useState(0);
 
   useLocation().pathname !== currentPage && setCurrentPage(location.pathname);
+
+  useEffect(() => {
+    const storedCandidates = localStorage.getItem("candidates");
+    if (storedCandidates) {
+      try {
+        const parsedCandidates = JSON.parse(storedCandidates);
+        setCandidateCount(parsedCandidates.length);
+      } catch (error) {
+        console.error("Error parsing candidates from localStorage:", error);
+      }
+    }
+  }, [currentPage]);
 
   return (
     <div style={navbarStyle}>
