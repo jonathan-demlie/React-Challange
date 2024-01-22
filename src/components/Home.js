@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const homeStyle = {
   display: "flex",
@@ -28,16 +28,29 @@ const buttonStyle = {
 };
 
 function Home() {
+  const [candidatesCount, setCandidatesCount] = useState(0);
+
+  useEffect(() => {
+    const storedCandidates = localStorage.getItem("candidates");
+    if (storedCandidates) {
+      const parsedCandidates = JSON.parse(storedCandidates);
+      setCandidatesCount(parsedCandidates.length);
+    }
+  }, []);
+
   return (
     <div data-testid="home-component" style={homeStyle}>
       <div style={buttonContainerStyle}>
-        {/* Hint: Implement this */}
-        <button data-testid="register-button" style={buttonStyle}>
-          Register Candidate
-        </button>
-        <button data-testid="list-button" style={buttonStyle}>
-          List Candidates
-        </button>
+        <Link to="/candidate/registration" style={{ textDecoration: "none" }}>
+          <button data-testid="register-button" style={buttonStyle}>
+            Register Candidate
+          </button>
+        </Link>
+        <Link to="/candidate/list" style={{ textDecoration: "none" }}>
+          <button data-testid="list-button" style={buttonStyle}>
+            List Candidates ({candidatesCount})
+          </button>
+        </Link>
       </div>
     </div>
   );
