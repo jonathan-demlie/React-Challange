@@ -9,7 +9,6 @@ function App(props) {
   return (
     <Router>
       <Navbar />
-
       <Routes>
         <Route path="/" element={<Home />} exact />
         <Route
