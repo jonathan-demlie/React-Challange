@@ -110,6 +110,15 @@ function CandidateRegistration() {
       skill: "",
     }))
   }
+  const handleReset = () => {
+    setFormData({
+      name: "",
+      email: "",
+      role: "",
+      skill: "",
+      skills: [],
+    })
+  }
 
   const handleFormSubmit = (e) => {
     e.preventDefault()
@@ -138,13 +147,7 @@ function CandidateRegistration() {
       },
     ])
 
-    setFormData({
-      name: "",
-      email: "",
-      role: "",
-      skill: "",
-      skills: [],
-    })
+    handleReset()
     setRegistrationStatus({
       status: "success",
       message: "candidate Profile created",
@@ -259,15 +262,7 @@ function CandidateRegistration() {
               <button
                 data-testid="reset-btn"
                 style={sharpEdgeButtonStyle}
-                onClick={() =>
-                  setFormData({
-                    name: "",
-                    email: "",
-                    role: "",
-                    skill: "",
-                    skills: [],
-                  })
-                }
+                onClick={handleReset}
               >
                 Reset
               </button>
