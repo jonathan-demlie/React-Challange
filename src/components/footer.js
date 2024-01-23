@@ -3,11 +3,13 @@ import React from 'react';
 function Footer() {
   const footerStyle = {
     backgroundColor: 'black',
-    padding: '20px',
+    margin: '0',
+    padding: '40px',
     color: 'white',
     position: 'fixed',
     bottom: '0', 
     width: '100%', 
+    height: '40px'
   };
 
   return (

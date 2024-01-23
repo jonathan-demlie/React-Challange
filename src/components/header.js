@@ -3,8 +3,9 @@ import React from 'react';
 function Header() {
   const headerStyle = {
     backgroundColor: 'black',
-    padding: '20px',
+    padding: '30px',
     width: '100%',
+    margin:'o',
   };
 
   return (

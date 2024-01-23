@@ -237,10 +237,9 @@ function CandidateRegistration({ onCandidateRegister }) {
                 type="button"
                 data-testid="add-btn"
                 style={addSkillButtonStyle}
-                onClick={handleAddSkill}
-              >
+                onClick={handleAddSkill}>
                 Add Skill
-              </button>
+               </button>
             </div>
             <div>
               {formData.skills.map((skill, index) => (

@@ -31,7 +31,7 @@ function Home() {
   return (
     <div data-testid="home-component" style={homeStyle}>
       <div style={buttonContainerStyle}>
-        {/* Hint: Implement this */}
+        
         <Link to="/candidate/registration" style={buttonStyle} data-testid="registration-btn">
           Register Candidate
         </Link>
