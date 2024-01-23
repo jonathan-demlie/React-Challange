@@ -5,7 +5,7 @@ function ProfileCard({ candidate }) {
     <div className="profile-card">
       <h2>{candidate.name}</h2>
       <p>Role: {candidate.role}</p>
-      <p>Skills: {candidate.skills.join(", ")}</p>
+      <p>Skills: {candidate.skills.join(", ")} </p>
     </div>
   );
 }
