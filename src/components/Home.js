@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const homeStyle = {
   display: "flex",
@@ -32,12 +32,20 @@ function Home() {
     <div data-testid="home-component" style={homeStyle}>
       <div style={buttonContainerStyle}>
         {/* Hint: Implement this */}
-        <button data-testid="register-button" style={buttonStyle}>
+        <Link
+          to="/candidate/registration"
+          data-testid="register-button"
+          style={buttonStyle}
+        >
           Register Candidate
-        </button>
-        <button data-testid="list-button" style={buttonStyle}>
+        </Link>
+        <Link
+          to="/candidate/list"
+          data-testid="list-button"
+          style={buttonStyle}
+        >
           List Candidates
-        </button>
+        </Link>
       </div>
     </div>
   );
