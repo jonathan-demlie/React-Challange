@@ -6,9 +6,11 @@ const alertMessage = {
 }
 
 const highlight = {
-  border: '2px solid red',
-  backgroundColor: 'red'
-}
+ 
+  boxShadow: '0 0 5px red',
+  color : 'red',
+ 
+};
 
 
 const centerContainerStyle = {
@@ -84,39 +86,112 @@ function CandidateRegistration() {
 
   const [registrationStatus, setRegistrationStatus] = useState(null);
   const [candidates, setCandidates] = useState([]);
-  const highlightInput = true;
+  const [candidateCount, setCandidateCount] = useState(0);
+
+  const [skillInputValue, setSkillInputValue] = useState(''); 
+
+  // const inputHandler=(e)=>{
+  //     setFormData([...formData,{[e.target.name]: e.target.value}])
+  // }
+  const inputHandler=(e)=>{
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value
+      })
+        
+  }
   
   const handleSkillChange = (e) => {
-  };
-  const handleAddSkill = () => {
-   
+    const skill = e.target.value;
+    setFormData((prevState) =>({
+        ...prevState,
+        skill,
+        // skills: [...prevState.skills, skill]
+    })
+    )
+
   };
 
- 
+  const handleAddSkill = () => {
+    if (formData.skill.trim() === "") {
+      return;
+    }
+  
+    if (formData.skills.length >= 5) {
+      alert("You can add only a maximum of 5 skills.");
+      return;
+    }
+  
+    setFormData((prevState) => ({
+      ...prevState,
+      skills: [...prevState.skills.slice(0, 4), formData.skill.trim()],
+      skill: "",
+    }));
+  };
+
+
 
   const handleFormSubmit = (e) => {
- 
+    e.preventDefault();
+  
+    const existingCandidate = candidates.find(
+      (candidate) => candidate.email === formData.email 
+    );
+  
+    if (existingCandidate) {
+      setRegistrationStatus('Email already exists');
+    } else if (formData.skills.length === 0) {
+      setRegistrationStatus('Please add at least one skill');
+    } else {
+      const newCandidate = {
+        name: formData.name,
+        email: formData.email,
+        role: formData.role,
+        skills: formData.skills
+      };
+  
+      setCandidates([...candidates, newCandidate]);
+      setCandidateCount((prevCount) => prevCount + 1);
+  
+      setFormData({
+        name: "",
+        email: "",
+        role: "",
+        skill: "",
+        skills: [],
+      });
+  
+      setRegistrationStatus('Candidate Profile Created');
+      // localStorage.setItem("candidates", JSON.stringify("candidates"))
+    }
   };
-
+  
+  
 
   useEffect(() => {
     const storedCandidates = localStorage.getItem("candidates");
     if (storedCandidates) {
       // Hint: Implement this
+      const parsedCandidates = JSON.parse(storedCandidates);
+      setCandidates(parsedCandidates);
+      setCandidateCount(parsedCandidates.length);
     }
   }, []);
 
   useEffect(() => {
     // Save candidates to localStorage whenever candidates state changes
+     localStorage.setItem("candidates",JSON.stringify(candidates))
+     setCandidateCount(candidates.length);
   }, [candidates]);
-
-  return (
+return (
     <div style={centerContainerStyle}>
       <div style={formBoxStyle}>
         <div data-testid="registration-component" style={formBoxStyle}>
           <form onSubmit={handleFormSubmit} >
             <div className="form-group" style={formGroupStyle}>
               <input
+              value={formData.name}
+              onChange={inputHandler}
                 type="text"
                 name="name"
                 placeholder="Name"
@@ -127,20 +202,30 @@ function CandidateRegistration() {
               />
             </div>
             <div className="form-group" style={formGroupStyle}>
+           
               <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                data-testid="form-input-name"
-                required
-                style={{ ...inputStyle, ...(highlightInput ? highlight : {}) }}
-              />
+              value={formData.email}
+              onChange={inputHandler}
+              type="email"
+              name="email"
+              placeholder="Email"
+              data-testid="form-input-email"
+              required
+              style={{
+                ...inputStyle,
+                ...(registrationStatus === 'Email already exists' || registrationStatus === 'Error' ? highlight : {}),
+              }}
+             
+              
+            />
             </div>
             <div className="form-group" style={formGroupStyle}>
               <input
+              value={formData.role}
+              onChange={inputHandler}
                 type="text"
                 name="role"
-              
+                data-testid="form-input-role"
                 placeholder="Role"
                 required
                 style={inputStyle}
@@ -152,23 +237,27 @@ function CandidateRegistration() {
                 type="text"
                 name="skill"
                 placeholder="Skill"
+               
+                value={formData.skill}
+                onChange={handleSkillChange}
                 style={inputStyle}
               />
               <button
                 type="button"
                 data-testid="add-btn"
+                onClick={handleAddSkill}
                 style={addSkillButtonStyle}
               >
                 Add Skill
               </button>
             </div>
             <div>
-              {formData.skills.map((skill, index) => (
-                <span data-testid="skill-tag" style={skillTagStyle}>
-                  {/* Implement this */}
-                </span>
-              ))}
-            </div>
+            {formData.skills.slice(0, 5).map((skill, index) => (
+              <span key={index} data-testid="skill-tag" style={skillTagStyle}>
+                {skill}
+              </span>
+            ))}
+          </div>
             <div style={buttonGroupStyle}>
               <button
                 data-testid="submit-btn"
@@ -177,14 +266,30 @@ function CandidateRegistration() {
               >
                 Register
               </button>
+             
               <button
-                data-testid="reset-btn"
-                style={sharpEdgeButtonStyle}
-              >
-                Reset
-              </button>
+                  data-testid="reset-btn"
+                  type="reset"
+                  style={sharpEdgeButtonStyle}
+                  onClick={() => {
+                    setFormData({ name: "", email: "", role: "", skill: "", skills: [] });
+                    setSkillInputValue("");
+                  }}
+                >Reset
+                </button>
             </div>
           </form>
+          {registrationStatus && (
+            <div style={alertMessage}>
+              <p data-testid="status">{registrationStatus}</p>
+            </div>
+        
+          )}
+
+          <div >
+        
+      </div>
+
         </div>
       </div>
     </div>

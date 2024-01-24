@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-// Base styles for the component
-const searchContainerStyle = {
+const searchContainerStyles = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -10,7 +9,7 @@ const searchContainerStyle = {
   textAlign: "center",
 };
 
-const profileCardStyle = {
+const profileCardStyles = {
   backgroundColor: "#f0f0f0",
   padding: "10px",
   maxWidth: "600px",
@@ -19,13 +18,13 @@ const profileCardStyle = {
   marginBottom: "10px",
 };
 
-const searchBoxContainerStyle = {
+const searchBoxContainerStyles = {
   display: "flex",
   alignItems: "center",
   marginBottom: "10px",
 };
 
-const skillsStyle = {
+const skillsStyles = {
   backgroundColor: "#333",
   color: "white",
   borderRadius: "5px",
@@ -33,7 +32,7 @@ const skillsStyle = {
   margin: "5px",
 };
 
-const searchBoxStyle = {
+const searchBoxStyles = {
   flex: "1",
   padding: "10px",
   fontSize: "14px",
@@ -42,96 +41,93 @@ const searchBoxStyle = {
   marginRight: "10px",
 };
 
-const buttonStyle = {
+const buttonStyles = {
   padding: "10px 20px",
   borderRadius: "5px",
   cursor: "pointer",
   marginRight: "10px",
 };
 
-const searchButtonStyle = {
-  ...buttonStyle,
+const searchButtonStyles = {
+  ...buttonStyles,
   backgroundColor: "#525252",
   color: "white",
   border: "none",
 };
 
-const listAllButtonStyle = {
-  ...buttonStyle,
+const listAllButtonStyles = {
+  ...buttonStyles,
   backgroundColor: "#525252",
   color: "white",
   border: "none",
 };
+
 
 function CandidateList() {
   const [searchText, setSearchText] = useState("");
-  const [filteredCandidates, setFilteredCandidates] = useState("");
+  const [filteredCandidates, setFilteredCandidates] = useState([]);
   const [candidates, setCandidates] = useState([]);
+  const [searchPerformed, setSearchPerformed] = useState(false); // New state variable
 
   useEffect(() => {
     const storedCandidates = localStorage.getItem("candidates");
     if (storedCandidates) {
-      // Hint: Implement this
+      setCandidates(JSON.parse(storedCandidates));
     }
   }, []);
 
   const handleSearch = () => {
-    // Hint: Implement this
+    const filtered = candidates.filter(candidate =>
+      candidate.skills.some(skill =>
+        skill.toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
+    setFilteredCandidates(filtered);
+    setSearchPerformed(true);
   };
 
   const handleListAll = () => {
-    // Hint: Implement this
+    setSearchText("");
+    setFilteredCandidates(candidates);
+    setSearchPerformed(false);
   };
 
+  useEffect(() => {
+    if (searchText === "") {
+      setFilteredCandidates([]);
+      setSearchPerformed(false);
+    }
+  }, [searchText]);
+
   return (
-    <div style={{ ...searchContainerStyle, alignItems: "center" }}>
-      <div style={searchBoxContainerStyle}>
+    <div style={{ ...searchContainerStyles, alignItems: "center" }}>
+      <div style={searchBoxContainerStyles}>
         <input
           type="text"
           placeholder="search skills"
-          value=""
-          style={searchBoxStyle}
-          //Hint: Implement this
+          value={searchText}
+          style={searchBoxStyles}
+          onChange={(e) => setSearchText(e.target.value)}
         />
-        <button style={searchButtonStyle}>Search Button</button>
-        <button data-testid="candidate-card" style={listAllButtonStyle}>
+        <button style={searchButtonStyles} onClick={handleSearch}>
+          Search
+        </button>
+        <button data-testid="candidate-card" style={listAllButtonStyles} onClick={handleListAll}>
           List All
         </button>
       </div>
-      {filteredCandidates.length === 0 ? (
-        // Implement this
-        console.log()
+      {searchPerformed && filteredCandidates.length === 0 ? (
+        <p>No candidates found</p>
       ) : (
-        // Fix and Implement this
-
-        {/* <div
+        <div
           style={{
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "flex-start",
           }}
         >
-          <div
-            key={candidate.id}
-            style={{
-              ...profileCardStyle,
-              textAlign: "left",
-              marginRight: "10px",
-            }}
-          >
-            <h2 style={{ marginBottom: "10px" }}>Role: {candidate.role}</h2>
-            <p>Name: {candidate.name}</p>
-            <p>Email: {candidate.email}</p>
-            <div>
-              <p style={{ fontWeight: "bold" }}>Skills</p>
-              <div style={{ display: "flex", flexWrap: "wrap" }}>
-                <div key={index} style={skillsStyle}>
-                   // Hint: Implement this
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
+          {/* Render candidate profiles */}
+        </div>
       )}
     </div>
   );
