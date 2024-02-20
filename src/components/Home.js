@@ -31,16 +31,22 @@ function Home() {
   return (
     <div data-testid="home-component" style={homeStyle}>
       <div style={buttonContainerStyle}>
-        {/* Hint: Implement this */}
-        <button data-testid="register-button" style={buttonStyle}>
-          Register Candidate
-        </button>
-        <button data-testid="list-button" style={buttonStyle}>
-          List Candidates
-        </button>
+        <Link to="/candidate/registration">
+          <button data-testid="register-button" style={buttonStyle}>
+            Register Candidate
+          </button>
+        </Link>
+        <Link to="/candidate/list">
+          <button data-testid="list-button" style={buttonStyle}>
+            List Candidates
+          </button>
+        </Link>
       </div>
     </div>
   );
 }
+
+//Done By Tensae Aschalew Actually Not Done but Modified yeah May be This is The right word!
+//Yenetta Mern Stack Project
 
 export default Home;
