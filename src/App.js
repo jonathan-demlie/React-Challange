@@ -15,7 +15,7 @@ function App(props) {
           path="/candidate/registration"
           element={<CandidateRegistration />}
           exact
-        />  
+        />
         <Route path="/candidate/list" element={<CandidateList />} />
       </Routes>
     </Router>
