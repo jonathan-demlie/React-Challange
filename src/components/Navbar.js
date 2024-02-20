@@ -20,7 +20,7 @@ const linkStyle = {
 
 const centerHeadingStyle = {
   marginLeft: "625px",
-  flex: "1", // Allow it to take up the remaining space
+  flex: "1",
 };
 
 function Navbar({ candidateCount }) {

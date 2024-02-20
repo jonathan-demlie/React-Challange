@@ -65,22 +65,28 @@ const listAllButtonStyle = {
 
 function CandidateList() {
   const [searchText, setSearchText] = useState("");
-  const [filteredCandidates, setFilteredCandidates] = useState("");
+  const [filteredCandidates, setFilteredCandidates] = useState([]);
   const [candidates, setCandidates] = useState([]);
 
   useEffect(() => {
     const storedCandidates = localStorage.getItem("candidates");
     if (storedCandidates) {
-      // Hint: Implement this
+      setCandidates(JSON.parse(storedCandidates));
     }
   }, []);
 
   const handleSearch = () => {
-    // Hint: Implement this
+    const filtered = candidates.filter((candidate) =>
+      candidate.skills.some((skill) =>
+        skill.toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
+    setFilteredCandidates(filtered);
   };
 
   const handleListAll = () => {
-    // Hint: Implement this
+    setSearchText("");
+    setFilteredCandidates(candidates);
   };
 
   return (
@@ -89,52 +95,63 @@ function CandidateList() {
         <input
           type="text"
           placeholder="search skills"
-          value=""
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
           style={searchBoxStyle}
-          //Hint: Implement this
         />
-        <button style={searchButtonStyle}>Search Button</button>
-        <button data-testid="candidate-card" style={listAllButtonStyle}>
+        <button onClick={handleSearch} style={searchButtonStyle}>
+          Search
+        </button>
+        <button
+          onClick={handleListAll}
+          data-testid="list-all-button"
+          style={listAllButtonStyle}
+        >
           List All
         </button>
       </div>
       {filteredCandidates.length === 0 ? (
-        // Implement this
-        console.log()
+        <p>No candidates found.</p>
       ) : (
-        // Fix and Implement this
-
-        {/* <div
+        <div
           style={{
             display: "flex",
             flexWrap: "wrap",
-            justifyContent: "flex-start",
+            justifyContent: "center",
           }}
         >
-          <div
-            key={candidate.id}
-            style={{
-              ...profileCardStyle,
-              textAlign: "left",
-              marginRight: "10px",
-            }}
-          >
-            <h2 style={{ marginBottom: "10px" }}>Role: {candidate.role}</h2>
-            <p>Name: {candidate.name}</p>
-            <p>Email: {candidate.email}</p>
-            <div>
-              <p style={{ fontWeight: "bold" }}>Skills</p>
-              <div style={{ display: "flex", flexWrap: "wrap" }}>
-                <div key={index} style={skillsStyle}>
-                   // Hint: Implement this
+          {filteredCandidates.map((candidate) => (
+            <div
+              key={candidate.id}
+              style={{
+                ...profileCardStyle,
+                textAlign: "left",
+                marginRight: "10px",
+                marginBottom: "10px",
+              }}
+            >
+              <h2 style={{ marginBottom: "10px" }}>Role: {candidate.role}</h2>
+              <p>Name: {candidate.name}</p>
+              <p>Email: {candidate.email}</p>
+              <div>
+                <p style={{ fontWeight: "bold" }}>Skills:</p>
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                  {candidate.skills.map((skill, index) => (
+                    <div key={index} style={skillsStyle}>
+                      {skill}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
-        </div> */}
+          ))}
+        </div>
       )}
     </div>
   );
 }
 
 export default CandidateList;
+
+//Done By Tensae Aschalew Actually Not Done but Modified yeah May be This is The right word!
+//Yenetta Mern Stack Project
